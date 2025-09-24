@@ -13,7 +13,7 @@
         <a href="tecnologias.php">Las tecnologias que utilizo.</a>
         <br>
         <br>
-                <form action="#" method="get">
+                <form action="consulta.php" method="post">
                     Tipo de pregunta:
                     <select name="tp">
                         <option value="sobremi">Sobre mi</option>
@@ -23,17 +23,16 @@
                     <br>
                     <fieldset>
                     <legend>Datos personales</legend>
-                    Nombre: <input type="text" name="nom">
+                    Nombre: <input type="text" name="nom" id="nom">
                     <br>
-                    Apellidos: <input type="text" name="ap">
+                    Apellidos: <input type="text" name="ap" id="ap">
                     <br>
                     email: <input type="text" name="email">
                     </fieldset>
                     <br>
-                    <form action="#" method="get">
                     Introduce tu pregunta:
                     <br>
-                    <textarea name="pregunta"></textarea>
+                    <input type="text" name="pregunta" id="pregunta">
                     <br>
                     <input type="reset" value="Borrar formulario">
                     <br>
