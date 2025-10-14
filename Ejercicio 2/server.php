@@ -18,7 +18,7 @@
                 <th></th>
                 <th></th>
             </tr>
-            <?php
+        <?php
 
         foreach($_SERVER as $servidor => $valor){
             echo "<tr>";
