@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>Perfil de desarrollador</title>  
+        <title>Tienda</title>  
     </head>
     <body>
         <section>

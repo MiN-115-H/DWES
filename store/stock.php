@@ -5,6 +5,8 @@ if (!$id) {
     die("No se recibió ningún producto.");
 }
 
+echo '<h2>Stock del producto en tiendas:</h2>';
+
 echo "Producto recibido: $id<br>";
 
 $con = new mysqli('localhost', 'root', '', 'tienda');
