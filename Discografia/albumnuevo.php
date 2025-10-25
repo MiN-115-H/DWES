@@ -1,13 +1,14 @@
 <?php
+session_start();
 $opc = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8');
 
 try {
     $dwes = new PDO('mysql:host=localhost;dbname=discografia', 'discografia', 'discografia', $opc);
 } catch (PDOException $e) {
-    echo 'Falló la conexión: ' . $e->getMessage();
+    die('Falló la conexión: ' . $e->getMessage());
 }
 
-if($_SERVER['REQUEST_METHOD'] === 'POST'){
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $titulo = $_POST['titulo'];
     $discografica = $_POST['discografica'];
     $formato = $_POST['formato'];
@@ -17,25 +18,22 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
     $sql = "INSERT INTO album(titulo, discografica, formato, fechaLanzamiento, fechaCompra, precio)
             VALUES (:titulo, :discografica, :formato, :fechaLanzamiento, :fechaCompra, :precio)";
-
     $stmt = $dwes->prepare($sql);
-
-    $stmt->bindParam(':titulo',$titulo);
-    $stmt->bindParam(':discografica',$discografica);
-    $stmt->bindParam(':formato',$formato);
-    $stmt->bindParam(':fechaLanzamiento',$fechaLanzamiento);
-    $stmt->bindParam(':fechaCompra',$fechaCompra);
-    $stmt->bindParam(':precio',$precio);
+    $stmt->bindParam(':titulo', $titulo);
+    $stmt->bindParam(':discografica', $discografica);
+    $stmt->bindParam(':formato', $formato);
+    $stmt->bindParam(':fechaLanzamiento', $fechaLanzamiento);
+    $stmt->bindParam(':fechaCompra', $fechaCompra);
+    $stmt->bindParam(':precio', $precio);
 
     try {
         $stmt->execute();
-        header("Location: /Discografia/index.php?mensaje=ok");
-        exit;
+        $_SESSION['mensaje'] = ['texto' => 'Álbum insertado correctamente.', 'tipo' => 'exito'];
     } catch (PDOException $e) {
-        header("Location: /Discografia/index.php?mensaje=error");
-        exit;
+        $_SESSION['mensaje'] = ['texto' => 'Error al añadir el álbum.', 'tipo' => 'error'];
     }
 
+    header("Location: index.php");
+    exit;
 }
-
 ?>
