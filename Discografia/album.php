@@ -8,6 +8,15 @@
 <section>
 <?php
 session_start(); 
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Pragma: no-cache");
+
+//Verificar sesión
+if (!isset($_SESSION['usuario'])) {
+    header("Location: login.php");
+    exit;
+}
+
 $id = $_GET['codigo'] ?? null;
 
 if (!$id) {
@@ -22,7 +31,6 @@ try {
     die('Falló la conexión: ' . $e->getMessage());
 }
 
-// Obtener información del álbum
 $consulta = "SELECT * FROM album WHERE codigo = :id";
 $stmt = $dwes->prepare($consulta);
 $stmt->bindParam(':id', $id, PDO::PARAM_INT);
@@ -34,7 +42,6 @@ if (!$album) {
     die("No se encontró el álbum.");
 }
 
-// Mostrar información del álbum
 echo "
 <h1>Información sobre el álbum</h1>
 <p>Título: " . htmlspecialchars($album->titulo) . "</p>
@@ -52,7 +59,7 @@ echo "
 </form>
 
 <?php
-// Obtener canciones del álbum
+
 $consulta2 = $dwes->prepare("
     SELECT c.titulo 
     FROM cancion c 
@@ -73,7 +80,6 @@ if ($consulta2->rowCount() == 0) {
 }
 ?>
 
-<!-- Formulario para agregar canciones -->
 <form action="cancionnueva.php" method="post">
     <h2>Añadir canción</h2>
     <input type="hidden" name="album" value="<?php echo htmlspecialchars($album->codigo, ENT_QUOTES, 'UTF-8'); ?>">
@@ -82,24 +88,25 @@ if ($consulta2->rowCount() == 0) {
     <input type="text" name="titulo" required><br>
 
     <label>Duración:</label>
-    <input type="number" name="duracion" required><br>
+    <input type="time" name="duracion" step="1" required><br>
 
     <label>Género:</label>
     <select name="genero" required>
         <option value="">--Selecciona un género--</option>
-        <option value="clasica">Clásica</option>
-        <option value="bso">BSO</option>
-        <option value="blues">Blues</option>
-        <option value="electronica">Electrónica</option>
-        <option value="jazz">Jazz</option>
-        <option value="metal">Metal</option>
-        <option value="pop">Pop</option>
-        <option value="rock">Rock</option>
+        <option value="Acustica">Acústica</option>
+        <option value="BSO">BSO</option>
+        <option value="Blues">Blues</option>
+        <option value="Folk">Folk</option>
+        <option value="Jazz">Jazz</option>
+        <option value="New age">New age</option>
+        <option value="Pop">Pop</option>
+        <option value="Rock">Rock</option>
+        <option value="Electronica">Electrónica</option>
     </select><br>
 
     <input type="submit" value="Agregar canción">
 </form>
-<button onclick="window.history.back()">Volver</button>
+<a href="index.php">Volver</a>
 <?php
 if (isset($_SESSION['mensaje'])) {
     $msg = $_SESSION['mensaje'];

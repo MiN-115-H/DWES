@@ -1,5 +1,13 @@
 <?php
 session_start();
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Pragma: no-cache");
+
+// 🔐 Verificar que el usuario ha iniciado sesión
+if (!isset($_SESSION['usuario'])) {
+    header("Location: login.php");
+    exit;
+}
 $opc = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8');
 
 try {
@@ -18,6 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $sql = "INSERT INTO album(titulo, discografica, formato, fechaLanzamiento, fechaCompra, precio)
             VALUES (:titulo, :discografica, :formato, :fechaLanzamiento, :fechaCompra, :precio)";
+    
     $stmt = $dwes->prepare($sql);
     $stmt->bindParam(':titulo', $titulo);
     $stmt->bindParam(':discografica', $discografica);

@@ -7,7 +7,15 @@
     <body>
         <h1>Álbumes</h1>
         <section>
-           <?php 
+           <?php
+            header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+            header("Pragma: no-cache");
+
+            // 🔐 Verificar que el usuario ha iniciado sesión
+            if (!isset($_SESSION['usuario'])) {
+                header("Location: login.php");
+                exit;
+            }
             $opc = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8');
             $dwes = new PDO('mysql:host=localhost;dbname=discografia', 'discografia', 'discografia', $opc);
 
