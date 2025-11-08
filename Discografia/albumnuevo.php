@@ -3,7 +3,7 @@ session_start();
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Pragma: no-cache");
 
-// 🔐 Verificar que el usuario ha iniciado sesión
+//Verificar sesión
 if (!isset($_SESSION['usuario'])) {
     header("Location: login.php");
     exit;
