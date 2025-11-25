@@ -11,7 +11,8 @@
 </head>
 <body>
     <?php
-        formularioBuscarCancion();
+        $cancion = new Cancion($_GET['titulo'],$_GET['cod'],'','','');
+        formularioCancion($cancion);
     ?>
 </body>
 </html>

@@ -3,14 +3,14 @@ session_start();
 
 $opc = [PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'];
 try {
-    $dwes = new PDO('mysql:host=localhost;dbname=discografia', 'discografia', 'discografia', $opc);
+    $dwes = new PDO('mysql:host=localhost;dbname=tareas', 'usr_tareas', 'usr_tareas', $opc);
     $dwes->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
     die('Falló la conexión: ' . $e->getMessage());
 }
 
 // Redirigir si hay sesión
-if (isset($_SESSION['usuario'])) {
+if (isset($_SESSION['nombre'])) {
     header("Location: index.php");
     exit;
 }
@@ -20,12 +20,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user = $_POST['user'] ?? '';
     $pass = $_POST['passwd'] ?? '';
 
-    $stmt = $dwes->prepare('SELECT id, usuario, password FROM tabla_usuarios WHERE usuario = :user');
+    $stmt = $dwes->prepare('SELECT id, nombre, contrasena FROM usuarios WHERE nombre = :user');
     $stmt->execute([':user' => $user]);
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($row && password_verify($pass, $row['password'])) {
-        $_SESSION['usuario'] = $row['usuario'];
+    if ($row && password_verify($pass, $row['contrasena'])) {
+        $_SESSION['nombre'] = $row['nombre'];
 
         setcookie("user", $user, time() + 86400, "/");
 

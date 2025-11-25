@@ -13,8 +13,6 @@
 	<body>
 		<?php
 			datosDiscografia();
-            echo "<br>";
-            echo "<a href='./logout.php'>Salir</a>"
 		?>
 	</body>
 </html>

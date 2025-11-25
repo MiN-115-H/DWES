@@ -5,13 +5,15 @@
     <?php
 		include("datos.ini.php");
         include("conexion.ini.php");
+        include("album.ini.php");
         include("cancion.ini.php");
 	?>
     <title>Document</title>
 </head>
 <body>
     <?php
-        formularioBuscarCancion();
+        $album = new Album($_GET['codigo'],'','','','','','');
+        datosDisco($album);
     ?>
 </body>
 </html>

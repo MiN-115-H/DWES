@@ -5,7 +5,7 @@ session_start();
 $opc = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8');
 
 try {
-    $dwes = new PDO('mysql:host=localhost;dbname=discografia', 'discografia', 'discografia', $opc);
+    $dwes = new PDO('mysql:host=localhost;dbname=tareas', 'usr_tareas', 'usr_tareas', $opc);
     $dwes->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
     die('Falló la conexión: ' . htmlspecialchars($e->getMessage()));
@@ -16,6 +16,8 @@ echo "<h1>Registro de usuario:</h1>";
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user = isset($_POST['user']) ? trim($_POST['user']) : '';
     $pass = isset($_POST['passwd']) ? $_POST['passwd'] : '';
+    $email = isset($_POST['email']) ? $_POST['email'] : '';
+    $rutaImg = isset($_POST['archivo']) ? $_POST['archivo'] : '';
 
     if ($user === '' || $pass === '') {
         echo '<p style="color:red">Usuario y contraseña son obligatorios.</p>';
@@ -24,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     try {
         //Comprobar si ya existe el usuario
-        $stmt = $dwes->prepare('SELECT id FROM tabla_usuarios WHERE usuario = :user LIMIT 1');
+        $stmt = $dwes->prepare('SELECT id FROM usuarios WHERE nombre = :user LIMIT 1');
         $stmt->execute([':user' => $user]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -45,9 +47,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         }
 
-        $sql = "INSERT INTO tabla_usuarios (usuario, password) VALUES (:user, :hash)";
+        $sql = "INSERT INTO usuarios (nombre, correo, contrasena, ruta_img) VALUES (:user, :email, :hash, :img)";
         $stmt = $dwes->prepare($sql);
-        $stmt->execute([':user' => $user, ':hash' => $hash]);
+        $stmt->execute([':user' => $user, ':email' => $email, ':hash' => $hash, ":img" => $rutaImg]);
 
         echo '<p style="color:green">Usuario registrado correctamente.</p>';
         echo '<a href="login.php">Inicio de sesión</a>';
@@ -66,8 +68,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <form action="" method="post">
     <label>Usuario:</label>
     <input type="text" name="user" required><br><br>
+    <label>Email:</label>
+    <input type="text" name="email" required><br><br>
     <label>Contraseña:</label>
     <input type="password" name="passwd" required><br><br>
+    <input type="file" name="archivo" id="archivo" accept="image/*" required><br><br>
     <input type="submit" value="Registrar usuario">
     <br><br>
     <a href="./login.php">Login</a>
